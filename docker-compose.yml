@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  coupon-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: tenda-coupon-api:latest
+    container_name: tenda-coupon-api
+    ports:
+      - "9090:9090"
+    environment:
+      - SPRING_PROFILES_ACTIVE=default
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:9090/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+
